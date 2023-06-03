@@ -4,12 +4,22 @@ import { useState } from 'react';
 const title = 'React'
 
 function App() {
+
+  const [searchText,setSearchText] = useState('');
+  const items = ['Apple','Mango','Pomegrante','Banana','Grapes']
+
+  const handleSearch = (e)=>{
+    setSearchText(e.target.value)
+  }
+
+  const result = items.filter(i => i.toLowerCase().includes(searchText.toLowerCase())) 
+
   return (
     <div>
       <Greet />
-      <Search />
-      <List list = {[1,2,3,4,5]} />
-      <List list = {['How','are','you','doing ?']} />
+      List of Items : <List list = {items} />
+      <Search Text={searchText} onSearch={handleSearch} />
+      Result set : <List list = {result} />
     </div>
   );
 }
@@ -29,31 +39,25 @@ function Greet(){
 const List = (props) =>{
   console.log('rendering List')
   return (
-    <div>
+    <>
       {props.list.map(val => {
-        return <span>{val}</span>
+        return <span> {val} </span>
       })}
-    </div>
+    </>
   );
 }
 
 //Search component
-const Search = () =>{
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value)
-  }
+const Search = (props) =>{
 
   console.log('rendering search')
 
   return (
     <div>
       <label htmlFor='search'>Search</label>
+      <input id ='search' value={props.Text} onChange={props.onSearch} type="text" />
       <br />
-      <input id ='search' onChange={handleChange} type="text" />
-      <br />
-      <i>You are searching for : {searchTerm}</i>
+      <i>You are searching for : {props.Text}</i>
     </div>
   );
 }
